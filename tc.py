@@ -1,6 +1,6 @@
 import json
 import argparse
-import os
+from os.path import exists
 
 parser = argparse.ArgumentParser(
     description = 'Программа для ведения списка дел.',
@@ -21,7 +21,7 @@ def adding_task(taask):
 
     tasks = taask
 
-    if not os.path.exists(work_file):
+    if not exists(work_file):
         tasks = [
             {
                 'id': 1,
