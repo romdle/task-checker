@@ -27,6 +27,7 @@ work_file = 'tasklist.json'
 
 
 def adding_task(taask):
+
     tasks = taask
     if not os.path.exists(work_file):
         tasks = [
@@ -37,7 +38,7 @@ def adding_task(taask):
             }
         ]
         with open(work_file, 'w') as file:
-            json.dump(tasks, file, indent=4)
+            json.dump(tasks, file, indent = 4)
 
     else:
         with open(work_file, 'r') as file:
@@ -55,27 +56,52 @@ def adding_task(taask):
 
 
 
-def delete(id):
+def delete_id(choosed_id):
+
     with open(work_file, 'r') as file:
         data = json.load(file)
 
+    data = [item for item in data if item["id"] != choosed_id]
+
+    with open(work_file, 'w') as file:
+        json.dump(data, file, indent = 4)
+
+
+
+def update_id(choosed_id, text):
+
+        with open(work_file, 'r') as file:
+            data = json.load(file)
+
+        for item in data:
+            if int(item['id']) == int(choosed_id):
+                item["description"] = text
+
+        with open(work_file, 'w') as file:
+            json.dump(data, file, indent = 4)
         
 
 
 def show_list(status):
+
     with open(work_file, 'r') as file:
         data = json.load(file)
+
     if status == 'all':
         print(json.dumps(data, indent = 4))
+
     elif status == 'todo':
         todo_tasks = [task for task in data if task.get('status') == 'todo']
         print(json.dumps(todo_tasks, indent = 4))
+
     elif status == 'in progress':
         in_progress_tasks = [task for task in data if task.get('status') == 'in progress']
         print(json.dumps(in_progress_tasks, indent = 4))
+
     elif status == 'done':
         done_tasks = [task for task in data if task.get('status') == 'done']
         print(json.dumps(done_tasks, indent = 4))
+
     else:
         print('Где-то ошибка ;)')
         exit()
@@ -85,11 +111,19 @@ def show_list(status):
 if args.add:
     print(f'Добавлено: {args.add if args.add else 'Нет задач'}.')
     adding_task(args.add)
+
 elif args.list:
     show_list(args.list)
+
 elif args.delete:
-    print(f'Элемент удалён {args.delete}')
-    delete(int(args.delete))
+    print(f'Элемент удалён: {args.delete} ')
+    delete_id(int(args.delete))
+
+elif args.update:
+    id_from_cli, text_from_cli = args.update.split()
+    print(f'Элемент обновлён: {args.update}')
+    update_id(int(id_from_cli), str(text_from_cli))
+
 else:
     exit()
 
