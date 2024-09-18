@@ -4,7 +4,7 @@ import os
 
 parser = argparse.ArgumentParser(
     description = 'Программа для ведения списка дел.',
-    epilog = 'Спасибо за использование этого скрипта!'
+    epilog = 'Работает с божьей помощью.'
     )
 
 parser.add_argument('-a', '--add', help='Добавьте новую задачу.', required = False)
